@@ -28,4 +28,13 @@ val_metric_df = pd.concat((val_metric_df, num_to_df), axis=1)
 # %%
 # join all tables together
 joined_df = pd.merge(val_metric_df, cos_data_df, on='Symbol')
-joined_df = pd.merge(joined_df, cos_data_df, on='Symbol')
+joined_df = pd.merge(joined_df, sector_data_df, on='Symbol')
+joined_df.to_csv('data/sp_clean_joined.csv', index=False)
+
+
+# %%
+import plotly.express as px
+import plotly.io as pio
+pio.renderers.default = "browser"
+fig = px.box(joined_df, x='GICS Sector', y='Beta', points="all")
+fig.show()
