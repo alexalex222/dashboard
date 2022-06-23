@@ -36,5 +36,19 @@ joined_df.to_csv('data/sp_clean_joined.csv', index=False)
 import plotly.express as px
 import plotly.io as pio
 pio.renderers.default = "browser"
-fig = px.box(joined_df, x='GICS Sector', y='Beta', points="all")
+joined_df = pd.read_csv('data/sp_clean_joined.csv')
+fig = px.sunburst(
+    joined_df[["Enterprise Value clean", "GICS Sector", "GICS Sub-Industry", "Symbol"]],
+    path=["GICS Sector", "GICS Sub-Industry", "Symbol"])
 fig.show()
+
+
+# %%
+import yfinance as yf
+
+stock = yf.Ticker('AMZN')
+stock_info = stock.info
+selected_keys = ['longName', 'beta', 'forwardPE', 'trailingPE',  'enterpriseValue', 'marketCap', 'fiftyTwoWeekHigh', 'fiftyTwoWeekLow']
+concise_info = {selected_key: stock_info[selected_key] for selected_key in selected_keys}
+
+
